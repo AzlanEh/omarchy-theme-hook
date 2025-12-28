@@ -37,7 +37,7 @@ theme-hook-update
 - Discord
 - Firefox
 - Ghostty
-- GTK (Nautilus/Files)
+- GTK (requires `adw-gtk-theme` from the AUR)
 - Hyprland
 - Kitty
 - Mako
@@ -53,6 +53,12 @@ theme-hook-update
 - Windsurf
 - Zed
 - Zen Browser (experimental - requires manual enabling of legacy userchrome styling)
+
+## Uninstalling
+You can remove the theme hook by running the following command:
+```
+curl -fsSL https://imbypass.github.io/omarchy-theme-hook/uninstall.sh | bash
+```
 
 ## FAQ
 

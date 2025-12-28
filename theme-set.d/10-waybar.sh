@@ -4,8 +4,6 @@ output_file="$HOME/.config/omarchy/current/theme/waybar.css"
 
 if [[ ! -f "$output_file" ]]; then
     cat > "$output_file" << EOF
-@define-color background #${primary_background};
-@define-color foreground #${primary_foreground};
 @define-color black #${normal_black};
 @define-color red #${normal_red};
 @define-color green #${normal_green};
@@ -22,5 +20,7 @@ if [[ ! -f "$output_file" ]]; then
 @define-color bright_magenta #${bright_magenta};
 @define-color bright_cyan #${bright_cyan};
 @define-color bright_white #${bright_white};
+@define-color background #${primary_background};
+@define-color foreground #${primary_foreground};
 EOF
 fi

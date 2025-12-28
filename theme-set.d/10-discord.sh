@@ -33,7 +33,7 @@ create_dynamic_theme() {
         --color05: #${bright_white};
         --color06: #${bright_white};
         --color07: #${bright_white};
-        --color08: #${bright_white};
+        --color08: #${normal_red};
         --color09: #${normal_yellow};
         --color10: #${bright_yellow};
         --color11: #${normal_green};
@@ -41,33 +41,18 @@ create_dynamic_theme() {
         --color13: #${normal_blue};
         --color14: #${normal_magenta};
         --color15: #${normal_yellow};
-
-        --font: "$(omarchy-font-current)";
-        --font-code: var(--font);
-        --font-primary: var(--font);
-        --font-display: var(--font);
-        --font-heading: var(--font);
-
-        --font-weight-light: 500;
-        --font-weight-normal: 550;
-
-        --font-weight-normal: 600;
-        --font-weight-light: 500;
-        --font-weight-medium: 600;
-        --font-weight-semibold: 800;
-        --font-weight-bold: 900;
     }
 EOF
 
     for path in "${possible_paths[@]}"; do
         if [ -d "$path" ]; then
 
-            if [[ -f "$path/themes/vencord.theme.css" ]]; then
-                rm "$path/themes/vencord.theme.css"
+            if [[ -f "$path/vencord.theme.css" ]]; then
+                rm "$path/vencord.theme.css"
             fi
-            cp "$output_file" "$path/themes/vencord.theme.css"
+            cp "$output_file" "$path/vencord.theme.css"
 
-            for file in "$path"/themes/*; do
+            for file in "$path"/*; do
                 if [ -f "$file" ]; then
                     touch "$file"
                 fi
