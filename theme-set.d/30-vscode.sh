@@ -1,14 +1,13 @@
 #!/bin/bash
 output_file="$HOME/.config/omarchy/current/theme/vscode_colors.json"
 
-# check current theme for vscode.json
-if [[ -f "$HOME/.config/omarchy/current/theme/vscode.json" ]]; then
-    echo "Existing VS Code theme detected. Skipping generation.."
-    exit 0
-fi
-
 if ! command -v code >/dev/null 2>&1; then
     skipped "VS Code"
+fi
+
+# check current theme for vscode.json
+if [[ -f "$HOME/.config/omarchy/current/theme/vscode.json" ]]; then
+    exit 0
 fi
 
 if [[ ! -f "$output_file" ]]; then

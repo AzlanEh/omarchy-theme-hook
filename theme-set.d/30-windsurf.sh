@@ -1,12 +1,17 @@
 #!/bin/bash
-
 output_file="$HOME/.config/omarchy/current/theme/vscode_colors.json"
 
-if ! command -v windsurf >/dev/null 2>&1; then
+if ! command -v code >/dev/null 2>&1; then
     skipped "Windsurf"
 fi
 
-cat > "$output_file" << EOF
+# check current theme for vscode.json
+if [[ -f "$HOME/.config/omarchy/current/theme/vscode.json" ]]; then
+    exit 0
+fi
+
+if [[ ! -f "$output_file" ]]; then
+    cat > "$output_file" << EOF
 {
     "\$schema": "vscode://schemas/color-theme",
     "name": "Omarchy",
@@ -1241,6 +1246,7 @@ cat > "$output_file" << EOF
     ]
 }
 EOF
+fi
 
 extension_name="tintedtheming.base16-tinted-themes"
 
