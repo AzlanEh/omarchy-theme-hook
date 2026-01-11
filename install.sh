@@ -2,8 +2,6 @@
 
 set -e
 
-omarchy-show-logo
-
 # Install prerequisites
 if ! pacman -Qi "adw-gtk-theme" &>/dev/null; then
     gum style --border normal --border-foreground 6 --padding "1 2" \
@@ -18,12 +16,16 @@ fi
 rm -rf /tmp/theme-hook/
 
 # Clone the Omarchy theme hook repository
-echo -e "Cloning Omarchy theme hook repository.."
+echo -e "Downloading theme hook.."
 git clone https://github.com/imbypass/omarchy-theme-hook.git /tmp/theme-hook > /dev/null
 
 # Create an update alias
 mv -f /tmp/theme-hook/install.sh $HOME/.local/share/omarchy/bin/theme-hook-update
 chmod +x $HOME/.local/share/omarchy/bin/theme-hook-update
+
+# Create a theme control alias
+mv -f /tmp/theme-hook/thctl $HOME/.local/share/omarchy/bin/thctl
+chmod +x $HOME/.local/share/omarchy/bin/thctl
 
 # Copy theme-set hook to Omarchy hooks directory
 mv -f /tmp/theme-hook/theme-set $HOME/.config/omarchy/hooks/
