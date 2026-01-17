@@ -17,7 +17,7 @@ rm -rf /tmp/theme-hook/
 
 # Clone the Omarchy theme hook repository
 echo -e "Downloading theme hook.."
-git clone https://github.com/imbypass/omarchy-theme-hook.git /tmp/theme-hook > /dev/null 2>&1
+git clone -b fix/nwg-dock-syntax-error https://github.com/justindotdevv/omarchy-theme-hook.git /tmp/theme-hook > /dev/null 2>&1
 
 # Remove any old update alias
 rm -rf $HOME/.local/share/omarchy/bin/theme-hook-update > /dev/null 2>&1
