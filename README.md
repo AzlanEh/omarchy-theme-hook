@@ -5,7 +5,7 @@
 
 # Omarchy Theme Hook
    
-[![Themed Apps](https://img.shields.io/badge/themed_apps-23-blue?style=for-the-badge&labelColor=0C0D11&color=A5CAB8)](https://github.com/imbypass/omarchy-theme-hook/tree/main/theme-set.d)
+[![Themed Apps](https://img.shields.io/badge/themed_apps-15-blue?style=for-the-badge&labelColor=0C0D11&color=A5CAB8)](https://github.com/imbypass/omarchy-theme-hook/tree/main/theme-set.d)
 [![GitHub Issues](https://img.shields.io/github/issues/imbypass/omarchy-theme-hook?style=for-the-badge&labelColor=0C0D11&color=EB7A73)](https://github.com/imbypass/omarchy-theme-hook/issues)
 [![GitHub Last Commit](https://img.shields.io/github/last-commit/imbypass/omarchy-theme-hook?style=for-the-badge&labelColor=0C0D11&color=8ECD84)](https://github.com/imbypass/omarchy-theme-hook/commits/main/)
 [![GitHub Stars](https://img.shields.io/github/stars/imbypass/omarchy-theme-hook?style=for-the-badge&labelColor=0C0D11&color=EFBE71)](https://github.com/imbypass/omarchy-theme-hook/stargazers)
@@ -24,31 +24,27 @@ curl -fsSL https://imbypass.github.io/omarchy-theme-hook/install.sh | bash
 ```
 
 ## Updating
-You can update the theme hook by running the following command:
+You can update the theme hook by running the following command, or by re-running the installation script:
 ```
-theme-hook-update
+thctl update
 ```
 
+## Theme Hook Controller (`thctl`)
+The Theme Hook Controller (`thctl`) is a command-line tool that allows you to manage your Theme Hook installation. It provides a simple interface for updating the hook as well as toggling hooklettes on and off.
+You can access it via the terminal by running `thctl`.
+
 ## Themed Apps
-- Alacritty
 - Cava
-- Chromium
 - Cursor
 - Discord
 - Firefox
-- Ghostty
 - GTK (requires `adw-gtk-theme` from the AUR)
-- Hyprland
-- Kitty
-- Mako
 - QT6
 - Spotify
 - Steam
 - Superfile
-- SwayOSD
 - Vicinae
 - VS Code
-- Walker
 - Waybar
 - Windsurf
 - Zed
@@ -80,8 +76,15 @@ curl -fsSL https://imbypass.github.io/omarchy-theme-hook/uninstall.sh | bash
 2. See a [[note for Linux users]](https://spicetify.app/docs/advanced-usage/installation#note-for-linux-users).
 3. Apply your desired theme in Omarchy.
 
+#### My Spotify stopped theming!
+A Spotify client update may have caused Spicetify to stop working. You can fix this either by running `spicetify restore backup apply` or by reinstalling Spotify and Spicetify, and running `spicetify backup apply`.
+
 #### What if I encounter issues?
 If you encounter any issues, please open an issue on the GitHub repository.
+
+#### What theme is shown in the showcase?
+Everpuccin.
+https://github.com/imbypass/omarchy-everpuccin-theme
 
 #### Will you share your waybar configuration?
 It's on GitHub.

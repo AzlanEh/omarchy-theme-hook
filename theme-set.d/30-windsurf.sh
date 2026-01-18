@@ -1,9 +1,13 @@
 #!/bin/bash
-
 output_file="$HOME/.config/omarchy/current/theme/vscode_colors.json"
 
-if ! command -v windsurf >/dev/null 2>&1; then
+if ! command -v code >/dev/null 2>&1; then
     skipped "Windsurf"
+fi
+
+# check current theme for vscode.json
+if [[ -f "$HOME/.config/omarchy/current/theme/vscode.json" ]]; then
+    exit 0
 fi
 
 if [[ ! -f "$output_file" ]]; then

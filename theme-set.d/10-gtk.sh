@@ -1,13 +1,14 @@
 #!/bin/bash
 
 output_file="$HOME/.config/omarchy/current/theme/gtk.css"
+light_file="$HOME/.config/omarchy/current/theme/light.mode"
 gtk3_dir="$HOME/.config/gtk-3.0"
 gtk4_dir="$HOME/.config/gtk-4.0"
 gtk3_file="$gtk3_dir/gtk.css"
 gtk4_file="$gtk4_dir/gtk.css"
 
 create_dynamic_theme() {
-    cat > "$output_file" << EOF
+cat > "$output_file" << EOF
     @define-color background     #${primary_background};
     @define-color foreground     #${primary_foreground};
     @define-color black          #${primary_background};
@@ -170,10 +171,10 @@ create_dynamic_theme() {
         background-color: @red;
     }
 
-    .svg-icon {
+    /* .svg-icon {
         filter: invert(79%) sepia(18%) saturate(611%) hue-rotate(192deg)
             brightness(103%) contrast(94%);
-    }
+    } */
 EOF
 }
 
@@ -200,8 +201,17 @@ else
     cp "$output_file" "$gtk4_file"
 fi
 
-gsettings set org.gnome.desktop.interface gtk-theme adw-gtk3-tmp
-gsettings set org.gnome.desktop.interface gtk-theme adw-gtk3
+if [ -f "$light_file" ]; then
+    gsettings set org.gnome.desktop.interface color-scheme "prefer-light"
+    gsettings set org.gnome.desktop.interface gtk-theme adw-gtk3-tmp
+    gsettings set org.gnome.desktop.interface gtk-theme adw-gtk3
+else
+    gsettings set org.gnome.desktop.interface color-scheme "prefer-dark"
+    gsettings set org.gnome.desktop.interface gtk-theme adw-gtk3-tmp-dark
+    gsettings set org.gnome.desktop.interface gtk-theme adw-gtk3-dark
+fi
+
+pkill -f xdg-desktop-portal-gtk
 
 require_restart "nautilus"
 success "GTK theme updated!"

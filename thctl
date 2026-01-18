@@ -1,0 +1,229 @@
+#!/bin/bash
+
+dot() {
+    dot_char=" "
+    case $1 in
+        green)
+            echo -e "\e[32m$dot_char\e[0m"
+            ;;
+        yellow)
+            echo -e "\033[0;33m$dot_char\e[0m"
+            ;;
+        red)
+            echo -e "\e[31m$dot_char\e[0m"
+            exit 1
+            ;;
+        cyan)
+            echo -e "\e[36m$dot_char\e[0m"
+            ;;
+        muted)
+            echo -e "  "
+            ;;
+    esac
+}
+
+open_hooks_dir() {
+    if [[ -d ~/.config/omarchy/hooks/theme-set.d ]]; then
+        xdg-open ~/.config/omarchy/hooks/theme-set.d & disown
+    fi
+}
+
+get_hook_list() {
+    enabled_hooks=()
+    disabled_hooks=()
+    if [[ -d ~/.config/omarchy/hooks/theme-set.d ]]; then
+        for hook in ~/.config/omarchy/hooks/theme-set.d/*.sh; do
+            hook_name=$(basename "$hook" .sh)
+            hook_name=${hook_name#*-}
+            if [[ -x "$hook" ]]; then
+                enabled_hooks+=("$hook_name")
+            else
+                disabled_hooks+=("$hook_name")
+            fi
+        done
+    fi
+
+    echo -e "\nEnabled Hooklettes:"
+    for hook in "${enabled_hooks[@]}"; do
+        echo -e " $(dot "green")$hook"
+    done
+
+    echo -e "\nDisabled Hooklettes:"
+    for hook in "${disabled_hooks[@]}"; do
+        echo -e " $(dot "red")$hook"
+    done
+}
+
+enable_hooks() {
+    hooks="$@"
+    IFS=' ' read -ra hooks_array <<< "$hooks"
+    hooks_array=("${hooks_array[@]:1}")
+    for new_hook in "${hooks_array[@]}"; do
+        if [[ -d ~/.config/omarchy/hooks/theme-set.d ]]; then
+            for old_hook in ~/.config/omarchy/hooks/theme-set.d/*.sh; do
+                hook_name=$(basename "$old_hook" .sh)
+                hook_name=${hook_name#*-}
+                if [[ "$hook_name" == "$new_hook" ]]; then
+                    echo -e "$(dot "green")Hooklette Enabled: $hook_name \033[90m($old_hook)\033[0m"
+                    if [[ ! -x "$old_hook" ]]; then
+                        chmod +x "$old_hook"
+                    fi
+                    post_enable "$hook_name"
+                    echo
+                fi
+            done
+        fi
+    done
+}
+
+disable_hooks() {
+    hooks="$@"
+    IFS=' ' read -ra hooks_array <<< "$hooks"
+    hooks_array=("${hooks_array[@]:1}")
+    for new_hook in "${hooks_array[@]}"; do
+        if [[ -d ~/.config/omarchy/hooks/theme-set.d ]]; then
+            for old_hook in ~/.config/omarchy/hooks/theme-set.d/*.sh; do
+                hook_name=$(basename "$old_hook" .sh)
+                hook_name=${hook_name#*-}
+                if [[ "$hook_name" == "$new_hook" ]]; then
+                    echo -e "$(dot "red")Hooklette Disabled: $hook_name \033[90m($old_hook)\033[0m"
+                    if [[ -x "$old_hook" ]]; then
+                        chmod -x "$old_hook"
+                    fi
+                    post_disable "$hook_name"
+                    echo
+                fi
+            done
+        fi
+    done
+}
+
+post_enable() {
+    case $1 in
+        "discord")
+            echo -e "$(dot "yellow")Discord themes cannot be automatically enabled/disabled."
+            echo -e "$(dot "muted")Please enable in your Discord client's theme settings panel."
+        ;;
+        "firefox")
+            echo -e "$(dot "yellow")Firefox themes cannot be automatically enabled/disabled."
+            echo -e "$(dot "muted")Please read the FAQ to disable Firefox theming."
+        ;;
+        "gtk")
+            if [ -f "$HOME/.config/omarchy/current/theme/light.mode" ]; then
+                gsettings set org.gnome.desktop.interface gtk-theme adw-gtk3-tmp
+                gsettings set org.gnome.desktop.interface gtk-theme adw-gtk3
+            else
+                gsettings set org.gnome.desktop.interface gtk-theme adw-gtk3-tmp-dark
+                gsettings set org.gnome.desktop.interface gtk-theme adw-gtk3-dark
+            fi
+        ;;
+        "spotify")
+            if command -v spicetify >/dev/null 2>&1; then
+                spicetify apply
+            fi
+        ;;
+        "steam")
+            adwaita_location=$HOME/.local/share/steam-adwaita
+            cd $adwaita_location && ./install.py \
+                --color-theme omarchy \
+                --extras library/hide_whats_new > /dev/null 2>&1
+        ;;
+        "vicinae")
+            vicinae theme set omarchy > /dev/null 2>&1
+        ;;
+        "zen")
+            echo -e "$(dot "yellow")Zen themes cannot be automatically enabled/disabled."
+            echo -e "$(dot "muted")Please read the FAQ to disable Zen theming."
+        ;;
+        *) return 0 ;;
+    esac
+}
+
+post_disable() {
+    case $1 in
+        "discord")
+            echo -e "$(dot "yellow")Discord themes cannot be automatically enabled/disabled."
+            echo -e "$(dot "muted")Please enable in your Discord client's theme settings panel."
+        ;;
+        "firefox")
+            echo -e "$(dot "yellow")Firefox themes cannot be automatically enabled/disabled."
+            echo -e "$(dot "muted")Please read the FAQ to disable Firefox theming."
+        ;;
+        "gtk")
+            if [ -f "$HOME/.config/omarchy/current/theme/light.mode" ]; then
+                gsettings set org.gnome.desktop.interface gtk-theme Adwaita
+            else
+                gsettings set org.gnome.desktop.interface gtk-theme Adwaita-dark
+            fi
+        ;;
+        "spotify")
+            if command -v spicetify >/dev/null 2>&1; then
+                spicetify restore backup apply
+            fi
+        ;;
+        "steam")
+            adwaita_location=$HOME/.local/share/steam-adwaita
+            cd $adwaita_location && ./install.py \
+                --uninstall > /dev/null 2>&1
+        ;;
+        "vicinae")
+            vicinae theme set vicinae-dark > /dev/null 2>&1
+        ;;
+        "zen")
+            echo -e "$(dot "yellow")Zen themes cannot be automatically enabled/disabled."
+            echo -e "$(dot "muted")Please read the FAQ to disable Zen theming."
+        ;;
+        *) return 0 ;;
+    esac
+}
+
+th_install() {
+    curl -fsSL https://imbypass.github.io/omarchy-theme-hook/install.sh | bash
+}
+
+th_uninstall() {
+    curl -fsSL https://imbypass.github.io/omarchy-theme-hook/uninstall.sh | bash
+}
+
+th_help() {
+    echo -e "Usage: thctl [command] [theme]"
+    echo
+    echo -e "Commands:"
+    echo -e "$(dot "muted")  help       Show this help message"
+    echo -e "$(dot "muted")  enable     Enable a hooklette"
+    echo -e "$(dot "muted")  disable    Disable a hooklette"
+    echo -e "$(dot "muted")  list       List all available hooklettes"
+    echo -e "$(dot "muted")  open       Open the hooklettes directory"
+    echo -e "$(dot "muted")  update     Update the theme hook"
+    echo -e "$(dot "muted")  uninstall  Uninstall the theme hook"
+
+}
+
+case $1 in
+    open) open_hooks_dir ;;
+    dir) open_hooks_dir ;;
+    o) open_hooks_dir ;;
+
+    list) get_hook_list ;;
+    ls) get_hook_list ;;
+    l) get_hook_list ;;
+
+    enable) enable_hooks "$@" ;;
+    on) enable_hooks "$@" ;;
+    e) enable_hooks "$@" ;;
+
+    disable) disable_hooks "$@" ;;
+    off) disable_hooks "$@" ;;
+    d) disable_hooks "$@" ;;
+
+    update) th_install ;;
+    up) th_install ;;
+    u) th_install ;;
+
+    remove) th_uninstall ;;
+    rm) th_uninstall ;;
+    r) th_uninstall ;;
+
+    help) th_help ;;
+    *) th_help; exit 0 ;;
+esac
