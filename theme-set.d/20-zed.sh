@@ -112,8 +112,9 @@ cat > "$new_zed_file" << EOF
 EOF
 }
 
-if ! command -v zeditor >/dev/null 2>&1; then
+if ! command -v zeditor >/dev/null 2>&1 && ! command -v zed >/dev/null 2>&1; then
     skipped "Zed"
+    exit 0
 fi
 
 mkdir -p "$HOME/.config/zed/themes"
